@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+[ $# -lt 2 ] && echo "Usage: $0 <device> <program> [args,...]"
+
+device="$1"
+OMP_NUM_THREADS=1 THEANO_FLAGS="device=$device,floatX=float32,allow_gc=False,linker=cvm_nogc,warn_float64=warn" ${@: 2}
+
+# note:
+# nvcc.fastmath=True seems have unmeasurable effect on speed

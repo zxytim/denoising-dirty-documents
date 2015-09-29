@@ -1,0 +1,3 @@
+*.pyc
+train_log
+data/
