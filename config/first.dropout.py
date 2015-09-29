@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-# $File: first.py
-# $Date: Wed Sep 30 00:05:35 2015 +0800
+# $File: first.dropout.py
+# $Date: Wed Sep 30 01:00:06 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -35,15 +35,19 @@ def get_model():
 
     model.add(Convolution2D(16, 8, 3, 3))
     model.add(Activation('relu'))
+    model.add(Dropout(0.2))
 
     model.add(Convolution2D(24, 16, 3, 3))
     model.add(Activation('relu'))
+    model.add(Dropout(0.2))
 
     model.add(Convolution2D(32, 24, 3, 3))
     model.add(Activation('relu'))
+    model.add(Dropout(0.2))
 
     model.add(Convolution2D(48, 32, 3, 3))
     model.add(Activation('relu'))
+    model.add(Dropout(0.2))
 
     # 1x1 here
 

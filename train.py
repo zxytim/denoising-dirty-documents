@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: train.py
-# $Date: Tue Sep 29 23:40:42 2015 +0800
+# $Date: Wed Sep 30 00:59:48 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -23,7 +23,7 @@ from progressbar import ProgressBar
 import imp
 import tabulate
 
-import cPickle as pickle
+from utils import mkdir_p, load_model, save_model, set_logging_file
 
 
 import logging
@@ -66,44 +66,6 @@ def validate_images_one_by_one(model, X_val, Y_val):
 
     return dict(loss=loss,
                 sqrt_loss=math.sqrt(loss))
-
-
-def set_logging_file(filename):
-    hdl = logging.FileHandler(
-        filename=filename, mode='a', encoding='utf-8')
-    logging.getLogger('__main__').addHandler(hdl)
-    logging.getLogger('theano').addHandler(hdl)
-    logging.getLogger('keras').addHandler(hdl)
-
-
-def mkdir_p(dirname):
-    try:
-        os.makedirs(dirname)
-    except OSError as e:
-        if e.errno != 17:
-            raise e
-
-
-def serialize(obj, path):
-    with open(path, 'wb') as f:
-        pickle.dump(obj, f)
-
-
-def deserialize(path):
-    with open(path, 'rb') as f:
-        return pickle.load(f)
-
-
-def save_model(model, history, prefix):
-    model.save_weights(prefix + '.model_weights', overwrite=True)
-    serialize(history, prefix + '.history')
-
-
-def load_model(model, prefix):
-    model.load_weights(prefix + '.model_weights')
-    history = deserialize(prefix + '.history')
-    return history
-
 
 def get_history_min_val_loss(history):
     if len(history) == 0:

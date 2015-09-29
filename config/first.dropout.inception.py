@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-# $File: first.py
-# $Date: Wed Sep 30 00:05:35 2015 +0800
+# $File: first.dropout.inception.py
+# $Date: Wed Sep 30 02:00:08 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -18,6 +18,7 @@ import cv2
 import numpy as np
 
 import utils
+import model_tools
 
 import logging
 logger = logging.getLogger(__name__)
@@ -35,15 +36,30 @@ def get_model():
 
     model.add(Convolution2D(16, 8, 3, 3))
     model.add(Activation('relu'))
+    model.add(Dropout(0.2))
 
-    model.add(Convolution2D(24, 16, 3, 3))
+    incept0, incept0_chan = model_tools.get_inception(
+        input_channel=16,
+        nr_c0_conv_1x1=16,
+        nr_c1_conv_1x1=8, nr_c1_conv_3x3=16,
+        nr_c2_conv_1x1=4, nr_c2_conv_5x5=8,
+        nr_c3_conv_1x1=16,
+        return_output_channels=True
+    )
+    model.add(incept0)
+
+
+    model.add(Convolution2D(24, incept0_chan, 3, 3))
     model.add(Activation('relu'))
+    model.add(Dropout(0.2))
 
     model.add(Convolution2D(32, 24, 3, 3))
     model.add(Activation('relu'))
+    model.add(Dropout(0.2))
 
     model.add(Convolution2D(48, 32, 3, 3))
     model.add(Activation('relu'))
+    model.add(Dropout(0.2))
 
     # 1x1 here
 
