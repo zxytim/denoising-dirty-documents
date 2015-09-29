@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: utils.py
-# $Date: Wed Sep 30 00:13:53 2015 +0800
+# $Date: Wed Sep 30 02:18:27 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -10,6 +10,7 @@ import logging
 import os
 import cPickle as pickle
 import logconf
+import cv2
 
 
 def set_logging_file(filename):

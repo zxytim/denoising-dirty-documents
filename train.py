@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: train.py
-# $Date: Wed Sep 30 00:59:48 2015 +0800
+# $Date: Wed Sep 30 02:10:46 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -107,8 +107,9 @@ def main():
 
     rng = np.random.RandomState(hash(args.seed))
 
-    sgd = Adam()
-    model.compile(loss='mean_squared_error', optimizer=sgd)
+    optimizer = Adam()
+    model.compile(loss=config.get('loss', 'mean_squared_error'),
+                                  optimizer=optimizer)
 
     (X_train, Y_train), (X_val, Y_val) = \
         config['data_train'], config['data_val']
