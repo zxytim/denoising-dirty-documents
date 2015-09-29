@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: first.maxout.inception.py
-# $Date: Wed Sep 30 02:13:14 2015 +0800
+# $Date: Wed Sep 30 04:21:00 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -39,41 +39,42 @@ def get_model():
     model.add(Activation('relu'))
     model.add(Maxout(2))
 
-    incept0, incept0_chan = model_tools.get_inception(
-        input_channel=16 / 2,
-        nr_c0_conv_1x1=16,
-        nr_c1_conv_1x1=8, nr_c1_conv_3x3=16,
-        nr_c2_conv_1x1=4, nr_c2_conv_5x5=8,
-        nr_c3_conv_1x1=16,
-        return_output_channels=True
-    )
-    model.add(incept0)
-    model.add(Maxout(2))
+#     incept0, incept0_chan = model_tools.get_inception(
+#         input_channel=16 / 2,
+#         nr_c0_conv_1x1=16,
+#         nr_c1_conv_1x1=8, nr_c1_conv_3x3=16,
+#         nr_c2_conv_1x1=4, nr_c2_conv_5x5=8,
+#         nr_c3_conv_1x1=16,
+#         return_output_channels=True
+#     )
+#     model.add(incept0)
+#     model.add(Maxout(2))
 
-    incept1, incept1_chan = model_tools.get_inception(
-        input_channel=incept0_chan / 2,
-        nr_c0_conv_1x1=16,
-        nr_c1_conv_1x1=8, nr_c1_conv_3x3=16,
-        nr_c2_conv_1x1=4, nr_c2_conv_5x5=8,
-        nr_c3_conv_1x1=16,
-        return_output_channels=True
-    )
-    model.add(incept1)
-    model.add(Maxout(2))
+#     incept1, incept1_chan = model_tools.get_inception(
+#         input_channel=incept0_chan / 2,
+#         nr_c0_conv_1x1=16,
+#         nr_c1_conv_1x1=8, nr_c1_conv_3x3=16,
+#         nr_c2_conv_1x1=4, nr_c2_conv_5x5=8,
+#         nr_c3_conv_1x1=16,
+#         return_output_channels=True
+#     )
+#     model.add(incept1)
+#     model.add(Maxout(2))
 
-    incept2, incept2_chan = model_tools.get_inception(
-        input_channel=incept1_chan / 2,
-        nr_c0_conv_1x1=16,
-        nr_c1_conv_1x1=8, nr_c1_conv_3x3=16,
-        nr_c2_conv_1x1=4, nr_c2_conv_5x5=8,
-        nr_c3_conv_1x1=16,
-        return_output_channels=True
-    )
-    model.add(incept2)
-    model.add(Maxout(2))
+#     incept2, incept2_chan = model_tools.get_inception(
+#         input_channel=incept1_chan / 2,
+#         nr_c0_conv_1x1=16,
+#         nr_c1_conv_1x1=8, nr_c1_conv_3x3=16,
+#         nr_c2_conv_1x1=4, nr_c2_conv_5x5=8,
+#         nr_c3_conv_1x1=16,
+#         return_output_channels=True
+#     )
+#     model.add(incept2)
+#     model.add(Maxout(2))
 
 
-    model.add(Convolution2D(24, incept2_chan / 2, 3, 3))
+#     model.add(Convolution2D(24, incept2_chan / 2, 3, 3))
+    model.add(Convolution2D(24, 16 / 2, 3, 3))
     model.add(Activation('relu'))
     model.add(Maxout(2))
 
@@ -90,30 +91,31 @@ def get_model():
     model.add(Maxout(2))
 
 
-    incept4, incept4_chan = model_tools.get_inception(
-        input_channel=incept3_chan / 2,
-        nr_c0_conv_1x1=24,
-        nr_c1_conv_1x1=8, nr_c1_conv_3x3=24,
-        nr_c2_conv_1x1=4, nr_c2_conv_5x5=12,
-        nr_c3_conv_1x1=24,
-        return_output_channels=True
-    )
-    model.add(incept4)
-    model.add(Maxout(2))
+#     incept4, incept4_chan = model_tools.get_inception(
+#         input_channel=incept3_chan / 2,
+#         nr_c0_conv_1x1=24,
+#         nr_c1_conv_1x1=8, nr_c1_conv_3x3=24,
+#         nr_c2_conv_1x1=4, nr_c2_conv_5x5=12,
+#         nr_c3_conv_1x1=24,
+#         return_output_channels=True
+#     )
+#     model.add(incept4)
+#     model.add(Maxout(2))
 
-    incept5, incept5_chan = model_tools.get_inception(
-        input_channel=incept4_chan / 2,
-        nr_c0_conv_1x1=24,
-        nr_c1_conv_1x1=8, nr_c1_conv_3x3=24,
-        nr_c2_conv_1x1=4, nr_c2_conv_5x5=12,
-        nr_c3_conv_1x1=24,
-        return_output_channels=True
-    )
-    model.add(incept5)
-    model.add(Maxout(2))
+#     incept5, incept5_chan = model_tools.get_inception(
+#         input_channel=incept4_chan / 2,
+#         nr_c0_conv_1x1=24,
+#         nr_c1_conv_1x1=8, nr_c1_conv_3x3=24,
+#         nr_c2_conv_1x1=4, nr_c2_conv_5x5=12,
+#         nr_c3_conv_1x1=24,
+#         return_output_channels=True
+#     )
+#     model.add(incept5)
+#     model.add(Maxout(2))
 
 
-    model.add(Convolution2D(32, incept5_chan / 2, 3, 3))
+#     model.add(Convolution2D(32, incept5_chan / 2, 3, 3))
+    model.add(Convolution2D(32, incept3_chan / 2, 3, 3))
     model.add(Activation('relu'))
     model.add(Maxout(2))
 
@@ -123,7 +125,7 @@ def get_model():
 
     # 1x1 here
 
-    model.add(Convolution2D(1, 48, 1, 1))  # a fully connected layer
+    model.add(Convolution2D(1, 48 / 2, 1, 1))  # a fully connected layer
     model.add(Activation('sigmoid'))
 
     return model

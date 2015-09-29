@@ -2,3 +2,4 @@
 train_log
 data/
 out/
+*.swp

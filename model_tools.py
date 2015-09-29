@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: model_tools.py
-# $Date: Wed Sep 30 01:45:41 2015 +0800
+# $Date: Wed Sep 30 04:23:29 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -11,6 +11,9 @@ from keras.layers.core import Dense, Dropout, Activation, Flatten, \
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, \
     ZeroPadding2D
 from keras.optimizers import SGD, Adam
+
+import theano
+import theano.tensor as T
 
 
 def get_inception(input_channel,
@@ -67,6 +70,10 @@ def get_inception(input_channel,
         return g, nr_c0_conv_1x1 + nr_c1_conv_3x3 + nr_c2_conv_5x5 + \
             nr_c3_conv_1x1
     return g
+
+
+def log_l2_loss(y_truth, y_pred):
+    return T.log(T.mean(T.sqr(y_truth - y_pred)))
 
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: train.py
-# $Date: Wed Sep 30 02:10:46 2015 +0800
+# $Date: Wed Sep 30 04:18:19 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -35,6 +35,7 @@ def summarize_history(histories):
     return dict(
         loss=loss,
         sqrt_loss=math.sqrt(loss),
+        loss_exp_sqrt=math.sqrt(math.exp(loss))
     )
 
 
@@ -65,7 +66,9 @@ def validate_images_one_by_one(model, X_val, Y_val):
             batch_size=1, verbose=False)
 
     return dict(loss=loss,
-                sqrt_loss=math.sqrt(loss))
+                sqrt_loss=math.sqrt(loss),
+                loss_exp_sqrt=math.sqrt(math.exp(loss))
+                )
 
 def get_history_min_val_loss(history):
     if len(history) == 0:
