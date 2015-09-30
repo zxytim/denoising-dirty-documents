@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: compute_rmse.py
-# $Date: Wed Sep 30 12:40:26 2015 +0800
+# $Date: Wed Sep 30 12:48:27 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -41,7 +41,7 @@ def main():
         rmse = mean_squared_error(p.image / 255.0, t.image / 255.0)**0.5
     rmse /= len(pred_items)
 
-    print 'RMSE: ', rmse
+    print rmse
 
 
 if __name__ == '__main__':
