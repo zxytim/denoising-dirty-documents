@@ -10,13 +10,25 @@ config_file="$1"
 bname=$(basename "$config_file")
 name=${bname%.*}
 
+
+num_files() {
+	local datset="$1"
+	[ $dataset = "train" ] && echo 115
+	[ $dataset = "val" ] && echo 29
+	[ $dataset = "test" ] && echo 72
+}
+
 for dataset in train val test; do
 	out_dir=out/${name}/${dataset}
+	dump_prefix=train_log/${name}/min_val_loss
+
+#    [ $(ls "$out_dir" | wc -l) == $(num_files $dataset) ] && continue
+
 	echo "./theano gpu4 \
 		./predict_images.py \
 		--image_list data/${dataset}.list \
 		--config $config_file \
-		--dump_prefix train_log/${name}/min_val_loss \
+		--dump_prefix $dump_prefix \
 		--output_dir $out_dir"
 done | parallel bash -c {}
 

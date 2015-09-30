@@ -1,6 +1,6 @@
 /*
  * $File: images2csv.cc
- * $Date: Wed Sep 30 11:35:22 2015 +0800
+ * $Date: Wed Sep 30 12:04:34 2015 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -63,7 +63,7 @@ void write_csv(const std::string &output_path, const std::vector<ImageItem> &ite
 		auto img = item.img;
 		for (auto i = 0; i < img.rows; i ++)
 			for (auto j = 0; j < img.cols; j ++) {
-				fprintf(fout, "%d_%d_%d,%f\n", item.id, i, j, img.at<uchar>(i, j) / 255.0f);
+				fprintf(fout, "%d_%d_%d,%f\n", item.id, i + 1, j + 1, img.at<uchar>(i, j) / 255.0f);
 			}
 	}
 
