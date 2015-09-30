@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: predict_images.py
-# $Date: Wed Sep 30 00:53:38 2015 +0800
+# $Date: Wed Sep 30 13:24:16 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -45,7 +45,7 @@ def main():
     for x, (input_path, _) in ProgressBar()(zip(X, image_list)):
         y = model.predict(np.array([x], dtype='float32'),
                                batch_size=1, verbose=False)
-        img = (y.reshape(y.shape[2:]) * 255.0).astype('uint8')
+        img = np.round(y.reshape(y.shape[2:]) * 255.0).astype('uint8')
 
         # FIXME: we assume that basenames of images are distinct
         fname = os.path.basename(input_path)
