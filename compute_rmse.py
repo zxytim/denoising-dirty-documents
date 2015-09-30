@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: compute_rmse.py
-# $Date: Wed Sep 30 12:33:26 2015 +0800
+# $Date: Wed Sep 30 12:40:26 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -18,7 +18,7 @@ class ImageItem(object):
     def __init__(self, fpath):
         self.fpath = fpath
         self.fname = os.path.basename(fpath)
-        self.image = cv2.imread(fpath)
+        self.image = cv2.imread(fpath, cv2.IMREAD_GRAYSCALE)
 
         self.id = self.fname
 
