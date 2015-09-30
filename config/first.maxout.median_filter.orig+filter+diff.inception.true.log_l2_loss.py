@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: first.maxout.median_filter.orig+filter+diff.inception.true.log_l2_loss.py
-# $Date: Wed Sep 30 12:14:44 2015 +0800
+# $Date: Wed Sep 30 13:18:38 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -66,7 +66,7 @@ def get_model():
     model.add(Maxout(2))
 
 
-    model.add(Convolution2D(32, 24 / 2, 3, 3))
+    model.add(Convolution2D(32, incept1_chan / 2, 3, 3))
     model.add(Activation('relu'))
     model.add(Maxout(2))
 
