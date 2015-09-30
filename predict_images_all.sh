@@ -33,6 +33,7 @@ for dataset in train val test; do
 done | parallel bash -c {}
 
 
-csv_path=out/${name}.test.csv
-zip_path=${csv_path}.test.zip
+rmse=$(./compute_rmse.py data/train_cleaned out/${name}/val)
+csv_path=out/${name}.test.val_rmse_$rmse.csv
+zip_path=${csv_path}.zip
 ./images2csv out/${name}/test $csv_path && 7z a $zip_path $csv_path && rm $csv_path
