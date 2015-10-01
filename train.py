@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: train.py
-# $Date: Wed Sep 30 04:26:56 2015 +0800
+# $Date: Thu Oct 01 12:02:29 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -64,6 +64,7 @@ def validate_images_one_by_one(model, X_val, Y_val):
             np.array(X_val[i:i+1], dtype='float32'),
             np.array(Y_val[i:i+1], dtype='float32'),
             batch_size=1, verbose=False)
+    loss /= len(X_val)
 
     return dict(loss=loss,
                 sqrt_loss=-math.sqrt(-loss) if loss < 0 else math.sqrt(loss),
