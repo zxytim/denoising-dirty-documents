@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-# $File: first.maxout.median_filter.orig+filter+diff.salt_pepper_0.02.log_l2_loss.py
-# $Date: Thu Oct 01 12:42:09 2015 +0800
+# $File: first.maxout.median_filter.orig+filter+diff.inception.bg.salt_pepper_0.02.log_l2_loss.py
+# $Date: Thu Oct 01 12:42:01 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -25,6 +25,8 @@ logger = logging.getLogger(__name__)
 
 rng = np.random.RandomState(42)
 
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, 'data')
 
 MODEL_INPUT_SHAPE = (11, 11)
 
@@ -59,6 +61,30 @@ def get_model():
     model.add(Activation('sigmoid'))
 
     return model
+
+
+_bgimgs = None
+def get_bgimg_pool():
+    global _bgimgs
+    if _bgimgs is None:
+        list_path = os.path.join(DATA_DIR, 'background.list')
+        paths = sum(utils.read_image_list(list_path), [])
+        _bgimgs = [cv2.imread(p, cv2.IMREAD_GRAYSCALE) for p in paths]
+        _bgimgs = filter(lambda x: x is not None, _bgimgs)
+        logger.info('{} background images'.format(len(_bgimgs)))
+
+    return _bgimgs
+
+
+def generate_data(baseimg):
+    ret = []
+    for bgimg in get_bgimg_pool():
+        img = baseimg.copy()
+        bgimg = cv2.resize(bgimg, (img.shape[1], img.shape[0]))
+        img = 255 - cv2.add(255 - img, img / 255.0 * (255 - bgimg), dtype=0)
+        ret.append(img)
+    return ret
+
 
 def gen_multi_channel(padded):
     m7  = cv2.medianBlur(padded, 7)
@@ -99,8 +125,11 @@ def augment(img):
     return img
 
 
+
 def read_images(fpath):
     lines = utils.read_image_list(fpath)
+
+    is_train = os.path.basename(fpath) == 'train.list'
 
     logger.info('loading data: {}'.format(fpath))
     X_data, y_data = [], []
@@ -110,15 +139,29 @@ def read_images(fpath):
         assert inst is not None and truth is not None, (inst_path, truth_path)
 
         pad_h, pad_w = [x / 2 for x in MODEL_INPUT_SHAPE]
+        # pad input image
         padded = cv2.copyMakeBorder(inst, pad_h, pad_h, pad_w, pad_w,
                                cv2.BORDER_REFLECT)
+        truth_padded = cv2.copyMakeBorder(truth, pad_h, pad_h, pad_w, pad_w,
+                               cv2.BORDER_REFLECT)
+
         truth = truth.reshape((1,) + truth.shape)
 
-        for img in [padded] + [augment(padded) for _ in range(10)]:
-            input = gen_multi_channel(img)
+        input = gen_multi_channel(augment(padded))
 
-            X_data.append(input)
-            y_data.append(truth)
+        X_data.append(input)
+        y_data.append(truth)
+
+        if is_train:
+            insts = generate_data(truth_padded)
+
+            for i in insts:
+                input = gen_multi_channel(augment(i))
+#                 for c in range(5):
+#                     cv2.imshow(str(c), input[c])
+#                 cv2.waitKey(0)
+                X_data.append(input)
+                y_data.append(truth)
 
     return X_data, y_data
 

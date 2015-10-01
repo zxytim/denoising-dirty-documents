@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: first.maxout.median_filter.orig+filter+diff.salt_pepper_0.02.thick.log_l2_loss.py
-# $Date: Thu Oct 01 11:54:39 2015 +0800
+# $Date: Thu Oct 01 12:48:51 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -60,6 +60,18 @@ def get_model():
 
     return model
 
+def gen_multi_channel(padded):
+    m7  = cv2.medianBlur(padded, 7)
+    m15 = cv2.medianBlur(padded, 15)
+
+    c7 = 255 - cv2.subtract(m7, padded)
+    c15 = 255 - cv2.subtract(m15, padded)
+
+
+    # (c, h, w) layout
+    input = np.array((padded, m7, m15, c7, c15))
+    return input
+
 
 def salt_pepper(img, white_prob, black_prob):
     # salt pepper
@@ -79,7 +91,7 @@ def salt_pepper(img, white_prob, black_prob):
 def augment(img):
 
     operators = [
-        lambda img: salt_pepper(img, rng.rand() * 0.02, rng.rand() * 0.02)
+        lambda img: img if rng.rand() < 0.5 else salt_pepper(img, rng.rand() * 0.02, rng.rand() * 0.02)
     ]
 
     for op in operators:
@@ -100,26 +112,13 @@ def read_images(fpath):
         pad_h, pad_w = [x / 2 for x in MODEL_INPUT_SHAPE]
         padded = cv2.copyMakeBorder(inst, pad_h, pad_h, pad_w, pad_w,
                                cv2.BORDER_REFLECT)
-        padded = augment(padded)
-
-        m7  = cv2.medianBlur(padded, 7)
-        m15 = cv2.medianBlur(padded, 15)
-
-        c7 = 255 - cv2.subtract(m7, padded)
-        c15 = 255 - cv2.subtract(m15, padded)
-
-#         for name, img in zip(['padded', 'm7', 'm15', 'c7', 'c15'],
-#                      [padded, m7, m15,   c7, c15]):
-#             cv2.imshow(name, img)
-#         cv2.waitKey(0)
-
-        # (c, h, w) layout
-        input = np.array((padded, m7, m15, c7, c15))
         truth = truth.reshape((1,) + truth.shape)
 
-        # pad input image
-        X_data.append(input)
-        y_data.append(truth)
+        for img in [padded] + [augment(padded) for _ in range(10)]:
+            input = gen_multi_channel(img)
+
+            X_data.append(input)
+            y_data.append(truth)
 
     return X_data, y_data
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: train.py
-# $Date: Thu Oct 01 12:02:29 2015 +0800
+# $Date: Thu Oct 01 12:06:52 2015 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 
@@ -71,6 +71,7 @@ def validate_images_one_by_one(model, X_val, Y_val):
                 loss_exp_sqrt=math.sqrt(math.exp(loss))
                 )
 
+
 def get_history_min_val_loss(history):
     if len(history) == 0:
         return float('inf')
@@ -107,8 +108,6 @@ def main():
         logger.info('loading snapshot: {}'.format(args.load))
         history = load_model(model, args.load)
 
-    # TODO load model
-
     rng = np.random.RandomState(hash(args.seed))
 
     optimizer = Adam()
@@ -124,6 +123,7 @@ def main():
 
     indexes = np.arange(len(X_train))
     while True:
+        logger.info('----------------------------------------------------')
         epoch += 1
         logger.info('starting epoch {}'.format(epoch))
 
@@ -149,11 +149,12 @@ def main():
         )
         history.append(cur_status)
 
-        logger.info('saving model')
+        logger.info('saving model: {}'.format(log_dir))
         save_model(model, history, model_dump_paths['latest'])
         if  val_loss < min_val_loss:
             min_val_loss = val_loss
             save_model(model, history, model_dump_paths['min_val_loss'])
+
 
 
 if __name__ == '__main__':
